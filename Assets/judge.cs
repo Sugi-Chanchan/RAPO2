@@ -10,9 +10,13 @@ public class judge : MonoBehaviour
 {
 
     public Image image;
+    public Text text;
+    public Text test2;
+
 
     private List<Frame> fres = new List<Frame>();
     public int time;
+
 
     public WebCamController webcamcontroller;
     public GameObject plane;
@@ -38,16 +42,27 @@ public class judge : MonoBehaviour
 
     void ListJudge() {
 
+        Input.gyro.enabled = true;
+        Input.compass.enabled = true;
+
+
 
         StartCoroutine("ListJudgeCoroutine");
+        if (Input.location.status != LocationServiceStatus.Running)
+        {
+
         Input.location.Start();
+
+
+        }
 
     }
 
 
     IEnumerator ListJudgeCoroutine(){
 
-        nowframecompleted = false; 
+         nowframecompleted = false; 
+
 
         yield return NowFrame();
 
@@ -63,7 +78,48 @@ public class judge : MonoBehaviour
 
 
 
+        if (a - 10 > 0)
+        {
+            /*
+            Vector2 before = new Vector2(fres[a - 7].longitude - fres[a - 10].longitude, fres[a - 7].latitude - fres[a - 10].latitude);
 
+            Vector2 after = new Vector2(fres[a].longitude - fres[a-4].longitude, fres[a].latitude - fres[a - 4].latitude);
+
+
+            var angles = Vector2.Angle(before, after);
+
+            text.text = angles+"";
+            test2.text = nowframe.longitude + ":" + nowframe.latitude;
+
+    */
+
+            /*
+                        float before = (fres[a - 10].anglebasednorth + fres[a - 9].anglebasednorth + fres[a - 8].anglebasednorth + fres[a - 7].anglebasednorth) / 4;
+                            float after =  (fres[a].anglebasednorth + fres[a - 1].anglebasednorth + fres[a - 2].anglebasednorth + fres[a - 3].anglebasednorth) / 4;
+
+                        var angle = after - before;
+
+                */
+
+            Quaternion q = Input.gyro.attitude;
+
+            //print(q.eulerAngles.y);
+            test2.text = q.eulerAngles.x+":"+ q.eulerAngles.y+"*"+q.eulerAngles.z ;
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+        a++;
+        b++;
     }
 
 
@@ -85,15 +141,32 @@ public class judge : MonoBehaviour
 
 
 
-        yield return TakePhoto();
+      yield return TakePhoto();
 
 
 
         nowframe = new Frame(location.latitude, location.longitude, location.altitude, Input.compass.trueHeading, Input.acceleration, false,"", nowsprite);
+        //print(Input.compass.trueHeading);
+
+
+
+
+       
+
+
+
+
+
+
 
 
 
         nowframecompleted = true;
+
+
+
+
+
 
 
 
@@ -115,9 +188,9 @@ public class judge : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         photo.SetPixels(webcamtexture.GetPixels());
-
+        photo.Apply();
         photo = rotateTexture(photo, true);
-        Sprite sprite= Sprite.Create(photo, new Rect(0, 0, 256, 256), Vector2.zero);
+        Sprite sprite= Sprite.Create(photo, new Rect(0, 0, 120, 160), Vector2.zero);
 
         nowsprite = sprite;
         

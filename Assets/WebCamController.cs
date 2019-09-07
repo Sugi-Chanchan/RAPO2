@@ -6,9 +6,9 @@ public class WebCamController : MonoBehaviour
 {
 
     //https://qiita.com/like_and_co/items/c760cdb1eee8b532af57
-    int width = 1920;
-    int height = 1080;
-    int fps = 60;
+    int width = 192;
+    int height = 108;
+    int fps = 20;
     public WebCamTexture webcamTexture;
 
     void Start()
