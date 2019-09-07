@@ -4,9 +4,10 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
 
+
 public class takePhoto : MonoBehaviour
 {
-    public WebCamTexture webCamTexture;
+    public WebCamController webcamcontroller;
     public GameObject plane;
     public Text text;
 
@@ -14,7 +15,7 @@ public class takePhoto : MonoBehaviour
     void Start()
     {
         text.text= Application.dataPath;
-        webCamTexture = plane.GetComponent<WebCamController>().webcamTexture;
+        webcamcontroller = plane.GetComponent<WebCamController>();
 
     }
 
@@ -27,6 +28,45 @@ public class takePhoto : MonoBehaviour
 
      IEnumerator TakePhoto()
     {
+        WebCamTexture webcamtexture = webcamcontroller.webcamTexture;
+
+        yield return new WaitForEndOfFrame();
+
+        // it's a rare case where the Unity doco is pretty clear,
+        // http://docs.unity3d.com/ScriptReference/WaitForEndOfFrame.html
+        // be sure to scroll down to the SECOND long example on that doco page 
+
+        Texture2D photo = new Texture2D(webcamtexture.width, webcamtexture.height);
+
+        yield return new WaitForEndOfFrame();
+
+        photo.SetPixels(webcamtexture.GetPixels());
+        photo.Apply();
+
+
+        NativeGallery.SaveImageToGallery(photo, "GalleryTest", "My img {0}.png");
+
+
+
+
+        /*
+                yield return new WaitForEndOfFrame();
+
+                var w = Screen.width;
+                var h = Screen.height;
+                var ss = new Texture2D(w, h, TextureFormat.RGB24, false);
+                ss.ReadPixels(new Rect(0, 0, w, h), 0, 0);
+                ss.Apply();
+
+                NativeGallery.SaveImageToGallery(ss, "GalleryTest", "My img {0}.png");
+
+        */
+
+
+
+
+        /*
+        WebCamTexture webcamtexture = webcamcontroller.webcamTexture;
 
         // NOTE - you almost certainly have to do this here:
 
@@ -36,13 +76,15 @@ public class takePhoto : MonoBehaviour
         // http://docs.unity3d.com/ScriptReference/WaitForEndOfFrame.html
         // be sure to scroll down to the SECOND long example on that doco page 
 
-        Texture2D photo = new Texture2D(webCamTexture.width, webCamTexture.height);
-        photo.SetPixels(webCamTexture.GetPixels());
-        photo.Apply();
+        Texture2D photo = new Texture2D(webcamtexture.width, webcamtexture.height);
+        / photo.SetPixels(webcamtexture.GetPixels());
+          photo.Apply();
 
-        //Encode to a PNG
-        byte[] bytes = photo.EncodeToPNG();
-        //Write out the PNG. Of course you have to substitute your_path for something sensible
-        File.WriteAllBytes(Application.dataPath + "photo.png", bytes);
+          //Encode to a PNG
+          byte[] bytes = photo.EncodeToPNG();
+          //Write out the PNG. Of course you have to substitute your_path for something sensible
+         File.WriteAllBytes(Application.dataPath + "photo.png", bytes);
+         */
+        //   NativeGallery.SaveImageToGallery(photo, "rapo", "My img {10}.jpg");
     }
 }
