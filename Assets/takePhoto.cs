@@ -7,6 +7,11 @@ using UnityEngine.UI;
 
 public class takePhoto : MonoBehaviour
 {
+
+    //http://baba-s.hatenablog.com/entry/2017/12/26/210500
+    //https://codeday.me/jp/qa/20190223/291286.html
+
+
     public WebCamController webcamcontroller;
     public GameObject plane;
     public Text text;
@@ -37,6 +42,7 @@ public class takePhoto : MonoBehaviour
         // be sure to scroll down to the SECOND long example on that doco page 
 
         Texture2D photo = new Texture2D(webcamtexture.width, webcamtexture.height);
+        
 
         yield return new WaitForEndOfFrame();
 
