@@ -15,7 +15,9 @@ public class WebCamController : MonoBehaviour
     {
         WebCamDevice[] devices = WebCamTexture.devices;
         webcamTexture = new WebCamTexture(devices[0].name, this.width, this.height, this.fps);
-        print(webcamTexture.videoRotationAngle);
+
+    
+
         
         GetComponent<Renderer>().material.mainTexture = webcamTexture;
         webcamTexture.Play();
