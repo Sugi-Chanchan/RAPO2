@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
+using System;
+
 
 
 public class takePhoto : MonoBehaviour
@@ -42,6 +44,7 @@ public class takePhoto : MonoBehaviour
         // be sure to scroll down to the SECOND long example on that doco page 
 
         Texture2D photo = new Texture2D(webcamtexture.width, webcamtexture.height);
+        photo = RotateTexture.rotate(photo);
         
 
         yield return new WaitForEndOfFrame();
@@ -50,7 +53,19 @@ public class takePhoto : MonoBehaviour
         photo.Apply();
 
 
-        NativeGallery.SaveImageToGallery(photo, "GalleryTest", "My img {0}.png");
+        //Encode to a PNG
+        byte[] bytes = photo.EncodeToPNG();
+        //Write out the PNG. Of course you have to substitute your_path for something sensible
+        File.WriteAllBytes(Application.dataPath + "photo.png", bytes);
+
+
+
+
+
+
+
+
+
 
 
 
@@ -93,4 +108,6 @@ public class takePhoto : MonoBehaviour
          */
         //   NativeGallery.SaveImageToGallery(photo, "rapo", "My img {10}.jpg");
     }
+
+    
 }
